@@ -7,17 +7,18 @@ function BookList() {
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageNum, setPageNum] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
+    const [sortBy, setSortBy] = useState<string>("");
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await fetch(`https://localhost:5000/Book?pageSize=${pageSize}&pageNum=${pageNum}`);
+            const response = await fetch(`https://localhost:5000/Book?pageSize=${pageSize}&pageNum=${pageNum}&orderBy=${sortBy}`);
             const data = await response.json();
             setBooks(data.books);
             setTotalPages(Math.ceil(data.totalNumBooks / pageSize));
         };
 
         fetchBooks();
-    }, [pageSize, pageNum]);
+    }, [pageSize, pageNum, sortBy]);
 
     return (
         <>
@@ -54,6 +55,10 @@ function BookList() {
             ))}
 
         <button disabled={pageNum === totalPages} onClick={() => setPageNum(pageNum + 1)}>Next</button>
+
+        <button onClick={() => setSortBy(sortBy === "title" ? "" : "title")}>
+            {sortBy === "title" ? "Unsort" : "Sort by Title"}
+        </button>
 
         <br />
         <label>

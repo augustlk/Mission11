@@ -12,16 +12,20 @@ namespace Mission11.API.Controllers
         public BookController(BookDbContext temp) => _bookContext = temp;
 
         [HttpGet]
-        public IActionResult GetProjects(int pageSize = 10, int pageNum = 1)
+        public IActionResult GetProjects(int pageSize = 10, int pageNum = 1, string orderBy = "")
         {
-            var something = _bookContext.Books
-            .Skip((pageNum - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
+            var query = _bookContext.Books.AsQueryable();
+
+            if (orderBy == "title")
+                query = query.OrderBy(b => b.Title);
+
+            var something = query
+                .Skip((pageNum - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             var totalNumBooks = _bookContext.Books.Count();
 
-            // the Ok converts the return to Json
             return Ok(new
             {
                 Books = something,
