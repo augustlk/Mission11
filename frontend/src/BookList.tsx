@@ -3,12 +3,14 @@ import type { Book } from "./types/Book";
 
 function BookList() {
 
+    // State for books data, pagination, and sorting
     const [books, setBooks] = useState<Book[]>([]);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageNum, setPageNum] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [sortBy, setSortBy] = useState<string>("");
 
+    // Fetch books from the API whenever page, size, or sort changes
     useEffect(() => {
         const fetchBooks = async () => {
             const response = await fetch(`https://localhost:5000/Book?pageSize=${pageSize}&pageNum=${pageNum}&orderBy=${sortBy}`);
@@ -24,6 +26,8 @@ function BookList() {
         <>
             <h1> Books</h1>
             <br />
+
+            {/* Render a card for each book */}
             {books.map((b) =>
                 <div id="bookCard" className="card" key={b.bookID}>
                     <h3 className="card-title">{b.title}</h3>
@@ -40,10 +44,10 @@ function BookList() {
                     </ul>
                     </div>
                 </div>
-        
-        )}
+            )}
 
-        <button disabled={pageNum === 1} onClick={() => setPageNum(pageNum - 1)}>Previous</button>
+            {/* Pagination controls */}
+            <button disabled={pageNum === 1} onClick={() => setPageNum(pageNum - 1)}>Previous</button>
 
             {[...Array(totalPages)].map(( _, i) => (
                 <button key={i + 1} 
@@ -54,27 +58,30 @@ function BookList() {
                 </button>
             ))}
 
-        <button disabled={pageNum === totalPages} onClick={() => setPageNum(pageNum + 1)}>Next</button>
+            <button disabled={pageNum === totalPages} onClick={() => setPageNum(pageNum + 1)}>Next</button>
 
-        <button onClick={() => setSortBy(sortBy === "title" ? "" : "title")}>
-            {sortBy === "title" ? "Unsort" : "Sort by Title"}
-        </button>
+            {/* Toggle sort by title */}
+            <button onClick={() => setSortBy(sortBy === "title" ? "" : "title")}>
+                {sortBy === "title" ? "Unsort" : "Sort by Title"}
+            </button>
 
-        <br />
-        <label>
-            Results per page:
-            <select 
-                value={pageSize} 
-                onChange={(p) => {
-                    setPageSize(Number(p.target.value));
-                    setPageNum(1)
-                }}
-            >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-            </select>
-        </label>
+            <br />
+
+            {/* Page size selector */}
+            <label>
+                Results per page:
+                <select 
+                    value={pageSize} 
+                    onChange={(p) => {
+                        setPageSize(Number(p.target.value));
+                        setPageNum(1)
+                    }}
+                >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+            </label>
 
         </>
     );
