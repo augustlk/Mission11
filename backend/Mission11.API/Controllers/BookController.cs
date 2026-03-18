@@ -12,10 +12,21 @@ namespace Mission11.API.Controllers
         public BookController(BookDbContext temp) => _bookContext = temp;
 
         [HttpGet]
-        public IEnumerable<Book> Get()
+        public IActionResult GetProjects(int pageSize = 10, int pageNum = 1)
         {
-            var something = _bookContext.Books.ToList();
-            return something;
+            var something = _bookContext.Books
+            .Skip((pageNum - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+            var totalNumBooks = _bookContext.Books.Count();
+
+            // the Ok converts the return to Json
+            return Ok(new
+            {
+                Books = something,
+                TotalNumBooks = totalNumBooks
+            });
         }
     }
 }
