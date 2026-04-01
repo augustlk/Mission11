@@ -18,7 +18,7 @@ function BookList() {
 
   // Fetch available categories once on mount
   useEffect(() => {
-    fetch('https://localhost:5000/Book/GetCategories')
+    fetch('https://mission13-august-backend-bwhxgfbub5hjbvhy.francecentral-01.azurewebsites.net/Book/GetCategories')
       .then((res) => res.json())
       .then((data: string[]) => setCategories(data))
       .catch(console.error);
@@ -34,7 +34,7 @@ function BookList() {
         category: selectedCategory,
       });
       const response = await fetch(
-        `https://localhost:5000/Book?${params.toString()}`
+        `https://mission13-august-backend-bwhxgfbub5hjbvhy.francecentral-01.azurewebsites.net/Book?${params.toString()}`
       );
       const data = await response.json();
       setBooks(data.books);
