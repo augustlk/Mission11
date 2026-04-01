@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import BookList from './BookList';
 import CartPage from './components/CartPage';
+import AdminBooksPage from './pages/AdminBooksPage';
 import './App.css';
 
 // Inner component to access location for "Continue Shopping" path
@@ -20,6 +21,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<BookList />} />
       <Route path="/cart" element={<CartPage returnPath={lastBookPath} />} />
+      <Route path="/adminbooks" element={<AdminBooksPage />} />
     </Routes>
   );
 }
